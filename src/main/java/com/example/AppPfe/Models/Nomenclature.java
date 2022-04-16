@@ -1,12 +1,19 @@
 package com.example.AppPfe.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
-public class Nomenclature {
+public class Nomenclature implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -15,4 +22,6 @@ public class Nomenclature {
     private String dureeConservation_1ereAge;
     private String dureeConservation_2emeAge;
     private String valeurHistorique_3emeAge;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private suivi_document suivi_documents;
 }

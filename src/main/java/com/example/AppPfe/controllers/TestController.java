@@ -3,10 +3,10 @@ package com.example.AppPfe.controllers;
 import com.example.AppPfe.Models.compteUtilisateur;
 import com.example.AppPfe.Models.lieuArchive;
 import com.example.AppPfe.Models.structureCentrale;
+import com.example.AppPfe.Models.suivi_doc_1ereAge;
+import com.example.AppPfe.exception.EmailException;
 import com.example.AppPfe.exception.ResourceNotFoundException;
-import com.example.AppPfe.repository.compteUtilisateurRepository;
-import com.example.AppPfe.repository.lieuArchiveRepo;
-import com.example.AppPfe.repository.structureRepository;
+import com.example.AppPfe.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +29,10 @@ public class TestController {
   structureRepository structureRepository;
   @Autowired
   lieuArchiveRepo lieuArchiveRepository;
+  @Autowired
+  nomenclatureRepo nomenclatureRepositories ;
+  @Autowired
+  suiviDoc1erAgeRepo suiviDoc1erAgeRepository;
 
   @GetMapping("/all")
   public String allAccess() {
@@ -61,10 +65,12 @@ public class TestController {
 
 
   @PostMapping("/Compte")
-  public void register(@RequestBody compteUtilisateur compte) {
+  public void register(@RequestBody compteUtilisateur compte) throws Exception {
+    compteUtilisateur user=compteRepository.findByEmail(compte.getEmail());
+    if(user != null){
+      throw new EmailException("string email");
+    }
     compteRepository.save(compte);
-
-
   }
 
   @GetMapping("/Comptes")
@@ -111,7 +117,6 @@ public class TestController {
 
   @PostMapping("/Structure")
   public structureCentrale registerr(@RequestBody structureCentrale structure) {
-
     System.out.println(structure);
     return structureRepository.save(structure);
   }
@@ -157,9 +162,27 @@ public class TestController {
     response.put("delete", Boolean.TRUE);
     return response;
   }
-/*
+
   @GetMapping("/Comptes/findbyEmail/{email}")
-  public structureCentrale trouverParEmail(@PathVariable String email){
-    return structureRepository.findByEmail(email);
-  }*/
+  public compteUtilisateur trouverParEmail(@PathVariable String email){
+    return compteRepository.findByEmail(email);
+  }
+
+  //traitement 1 ere age
+
+  @PostMapping("/SuiviDocument")
+  public void saveDocument(@RequestBody suivi_doc_1ereAge suivi_doc_1ereAge) {
+    suiviDoc1erAgeRepository.save(suivi_doc_1ereAge);}
+
+  @GetMapping("/SuiviDocuments")
+  public List<suivi_doc_1ereAge> getAllDocuments() {
+    return  suiviDoc1erAgeRepository.findAll();
+  }
+  @GetMapping("/SuiviDocuments/{id}")
+  public ResponseEntity<suivi_doc_1ereAge> getDocumentsById(@PathVariable(value = "id") Long id)
+          throws ResourceNotFoundException {
+    suivi_doc_1ereAge suivi_doc_1ereAge = suiviDoc1erAgeRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Document not found"));
+    return ResponseEntity.ok().body(suivi_doc_1ereAge);
+  }
 }

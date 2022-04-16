@@ -16,7 +16,6 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @ToString
 public class suivi_doc_2emeAge extends suivi_document{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 }

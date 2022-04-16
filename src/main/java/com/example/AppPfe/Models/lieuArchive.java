@@ -19,7 +19,5 @@ public class lieuArchive implements Serializable {
     @Id
     private Long id;
     private String Lieu;
-
-
-
+    private int code;
 }

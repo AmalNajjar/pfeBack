@@ -4,27 +4,30 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class suivi_document {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int num_doc;
-    private String chapitre_comptable ;
-    private int nbr_pages;
-    private Date date_creation;
-    private Date date_entree;
-    private int nbr_doc ;
-    private String limite_conservation;
+@MappedSuperclass
+abstract public class suivi_document implements Serializable {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+        private String limite_de_conservation_1ere_age;
+        private int Numero_document;
+        private String Chapitre_comptable ;
+        private int Nombre_De_pages;
+        private Date Date_De_creation_Du_Document;
+        private Date Date_d_entree_Du_Document;
+        private int Nombre_De_documents ;
+        @OneToOne
+        @JoinColumn(name ="designation_Nomenclature",referencedColumnName = "designation_Nomenclature")
+        private Nomenclature designation_Nomenclature;
+        //@ManyToMany(cascade = CascadeType.ALL)
+        //@JoinColumn(name ="designation_Nomenclature",referencedColumnName = "id")
+        //private List<Nomenclature> designation_Nomenclature=new ArrayList<>();
 }

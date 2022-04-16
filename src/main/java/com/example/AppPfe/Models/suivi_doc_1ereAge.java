@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -16,7 +13,10 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @ToString
 public class suivi_doc_1ereAge extends suivi_document {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name ="libelleDirection",referencedColumnName="libelleDirection")
+    private DirectionRegionale libelleDirection;
+    //  @JoinColumn(name = "libelleDirection",referencedColumnName = " libelleDirection")}
 }
